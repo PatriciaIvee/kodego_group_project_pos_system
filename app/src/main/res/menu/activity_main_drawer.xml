@@ -7,18 +7,32 @@
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_android_black_24dp"
-            android:title="Orders" />
+            android:title="@string/orders" />
         <item
             android:id="@+id/nav_items"
             android:icon="@drawable/ic_android_black_24dp"
-            android:title="Items" />
+            android:title="@string/items" />
         <item
             android:id="@+id/nav_sales"
             android:icon="@drawable/ic_android_black_24dp"
-            android:title="Sales" />
+            android:title="@string/sales" />
         <item
             android:id="@+id/nav_receipts"
             android:icon="@drawable/ic_android_black_24dp"
-            android:title="Receipts" />
+            android:title="@string/receipts" />
     </group>
+
+
+
+    <item
+        android:title="@string/app"
+        android:id="@+id/settings">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_android_black_24dp"
+                android:title="@string/settings"/>
+        </menu>
+    </item>
+
 </menu>

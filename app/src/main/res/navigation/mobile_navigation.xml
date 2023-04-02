@@ -28,4 +28,10 @@
         android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.receipts.ReceiptsFragment"
         android:label="Receipts"
         tools:layout="@layout/fragment_receipts" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_receipts" />
 </navigation>
