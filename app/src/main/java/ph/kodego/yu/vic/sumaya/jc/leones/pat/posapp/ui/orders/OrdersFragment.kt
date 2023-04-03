@@ -24,6 +24,8 @@ class OrdersFragment : Fragment() {
     ): View? {
         _binding = FragmentOrdersBinding.inflate(inflater, container, false)
 
+        val items = arrayListOf("All Items", "Item 1", "Item 2", "Item 3")
+
         return binding.root
     }
 
