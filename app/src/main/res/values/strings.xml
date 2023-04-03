@@ -24,4 +24,17 @@
     <string name="_00_00">00.00</string>
     <string name="item_name">Item Name</string>
     <string name="x0">x0</string>
+    <string name="search">Search</string>
+    <string name="check_out_orders">Check Out Orders</string>
+
+    <string-array name="item_options_array">
+        <item>All Items</item>
+        <item>Item Category 1</item>
+        <item>Item Category 2</item>
+        <item>Item Category 3</item>
+        <item>Item Category 4</item>
+        <item>Item Category 5</item>
+        <item>Item Category 6</item>
+        <item>Item Category 7</item>
+    </string-array>
 </resources>

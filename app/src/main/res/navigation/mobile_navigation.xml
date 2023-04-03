@@ -9,7 +9,18 @@
         android:id="@+id/nav_orders"
         android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrdersFragment"
         android:label="Orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+
+        <action android:id="@+id/action_nav_orders_to_orderListFragment"
+            app:destination="@id/nav_orders_order_list" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_orders_order_list"
+        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrderListFragment"
+        android:label="Orders"
+        tools:layout="@layout/fragment_order_list" />
 
     <fragment
         android:id="@+id/nav_items"
