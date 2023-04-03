@@ -1,10 +1,9 @@
 package ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders
 
 import android.os.Bundle
+import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
@@ -24,6 +23,7 @@ class OrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentOrdersBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -34,4 +34,6 @@ class OrdersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
     }
+
+
 }

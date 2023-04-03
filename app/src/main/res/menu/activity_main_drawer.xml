@@ -6,22 +6,21 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_orders"
-            android:icon="@drawable/ic_android_black_24dp"
+            android:icon="@drawable/orders"
             android:title="@string/orders" />
         <item
             android:id="@+id/nav_items"
-            android:icon="@drawable/ic_android_black_24dp"
+            android:icon="@drawable/items"
             android:title="@string/items" />
         <item
             android:id="@+id/nav_sales"
-            android:icon="@drawable/ic_android_black_24dp"
+            android:icon="@drawable/sales2"
             android:title="@string/sales" />
         <item
             android:id="@+id/nav_receipts"
-            android:icon="@drawable/ic_android_black_24dp"
+            android:icon="@drawable/receipts"
             android:title="@string/receipts" />
     </group>
-
 
 
     <item
@@ -30,7 +29,7 @@
         <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_android_black_24dp"
+                android:icon="@drawable/ic_baseline_settings_24"
                 android:title="@string/settings"/>
         </menu>
     </item>

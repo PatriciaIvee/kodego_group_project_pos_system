@@ -19,4 +19,9 @@
     <string name="items">Items</string>
     <string name="orders">Orders</string>
     <string name="app">App</string>
+    <string name="order">Order</string>
+    <string name="total">Total</string>
+    <string name="_00_00">00.00</string>
+    <string name="item_name">Item Name</string>
+    <string name="x0">x0</string>
 </resources>
