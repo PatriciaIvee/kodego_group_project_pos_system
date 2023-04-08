@@ -6,21 +6,37 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.ItemAdapter
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentOrdersBinding
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Item
 
 class OrdersFragment : Fragment() {
 
     private var _binding: FragmentOrdersBinding? = null
     private val binding get() = _binding!!
     private var actionOrderListBadge: TextView? = null
+
     //badgeCount for items to be charged in orderListFragment (sample)
     private var badgeCount = 6
+
+    private val viewModel: OrderListViewModel by activityViewModels()
+
+    private lateinit var itemAdapter: ItemAdapter
+    private var items: ArrayList<Item> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        init()
+    }
+    override fun onStart() {
+        super.onStart()
     }
 
     override fun onCreateView(
@@ -28,6 +44,10 @@ class OrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentOrdersBinding.inflate(inflater, container, false)
+
+        itemAdapter = ItemAdapter(items,requireActivity())
+        binding.recyclerItem.adapter = itemAdapter
+        binding.recyclerItem.layoutManager = GridLayoutManager(requireContext(),3)
 
         //ADDS STRING ARRAY FROM STRING RESOURCES
         context?.let {
@@ -42,6 +62,7 @@ class OrdersFragment : Fragment() {
                 _binding!!.itemSpinner.adapter = adapter
             }
         }
+        //DO SOMETHING WHEN OPTIONS FROM ARRAY IS SELECTED
         _binding!!.itemSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // Perform actions when an option is selected
@@ -67,20 +88,16 @@ class OrdersFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.order_fragment_menu, menu)
 
-
         val menuItem = menu.findItem(R.id.action_order_list)
         menuItem.setActionView(R.layout.order_fragment_action_image_badge)
 
-
         val actionView = menuItem.actionView
-        if (actionView != null) {
-            actionOrderListBadge = actionView.findViewById(R.id.action_order_list_badge)
+            actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
             updateBadge(menu)
             actionView.setOnClickListener {
                 // Navigate to the orderList fragment
                 findNavController().navigate(R.id.action_nav_orders_to_orderListFragment)
             }
-        }
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -99,23 +116,38 @@ class OrdersFragment : Fragment() {
 //    }
 
 
-    private fun updateBadge(menu: Menu ) {
+    //badge does not immediately update when I start the app.
+    // Only updates after opening OrderListFragment
+    private fun updateBadge(menu: Menu) {
+        viewModel.totalOrderQuantity.observe(viewLifecycleOwner) { totalOrderQuantity ->
+//             Update the UI with the new total order quantity
+            val menuItem = menu?.findItem(R.id.action_order_list)
+            val actionView = menuItem?.actionView
+//                actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
 
-        // Get the action_order_list_badge TextView
-        val menuItem = menu.findItem(R.id.action_order_list)
-        val actionView = menuItem.actionView
-        if (actionView != null) {
-            actionOrderListBadge = actionView.findViewById(R.id.action_order_list_badge)
-
-            if (badgeCount > 0) {
+            if (totalOrderQuantity > 0) {
                 // Show the badge if the count is greater than 0
-                actionOrderListBadge?.text = badgeCount.toString()
+                actionOrderListBadge?.text = totalOrderQuantity.toString()
                 actionOrderListBadge?.visibility = View.VISIBLE
             } else {
                 // Hide the badge if the count is 0
                 actionOrderListBadge?.visibility = View.GONE
             }
+
         }
     }
 
+
+    private fun init(){
+        items.add(Item("Item 1", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 2", 200.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 3", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 4", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 5", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 6", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 7", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 8", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 9", 100.0f,R.drawable.ic_baseline_image_24))
+        items.add(Item("Item 10", 100.0f,R.drawable.ic_baseline_image_24))
+    }
 }

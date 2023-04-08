@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
+        android:weightSum="3"
         app:layout_constraintTop_toBottomOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -45,6 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/total"
+            android:layout_gravity="start"/>
+
+        <TextView
+            android:id="@+id/text_total_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total Items: "
             android:layout_gravity="start"/>
 
         <TextView

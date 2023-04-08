@@ -31,19 +31,33 @@
             android:layout_height="wrap_content"
             android:text="@string/item_name"
             android:layout_marginStart="6dp"
-            app:layout_constraintBottom_toTopOf="@id/text_stock"
+            app:layout_constraintBottom_toTopOf="@id/item_price"
             app:layout_constraintStart_toEndOf="@+id/image_view_item"
             app:layout_constraintTop_toTopOf="@id/image_view_item" />
 
         <TextView
-            android:id="@+id/text_stock"
+            android:id="@+id/item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 in Stock"
+            android:text="@string/_00_00"
+            android:fontFamily="@font/roboto"
+            android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toTopOf="@id/text_order_quantity"
+            app:layout_constraintStart_toEndOf="@+id/image_view_item"
+            app:layout_constraintTop_toBottomOf="@id/item_name" />
+
+
+        <TextView
+            android:id="@+id/text_order_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/x0"
+            android:fontFamily="@font/nunito"
+            android:textSize="12sp"
             android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="@id/image_view_item"
             app:layout_constraintStart_toEndOf="@+id/image_view_item"
-            app:layout_constraintTop_toBottomOf="@id/item_name" />
+            app:layout_constraintTop_toBottomOf="@id/item_price" />
 
         <TextView
             android:id="@+id/text_amount"

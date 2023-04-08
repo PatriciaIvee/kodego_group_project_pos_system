@@ -13,6 +13,8 @@
         android:layout_height="100dp"
         android:text="Charge \n 00.00"
         android:layout_marginTop="60dp"
+        android:textColor="@drawable/btn_text_pressed"
+        android:background="@drawable/button"
         app:layout_constraintBottom_toTopOf="@id/text_total_amount_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

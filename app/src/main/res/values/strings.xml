@@ -26,6 +26,7 @@
     <string name="x0">x0</string>
     <string name="search">Search</string>
     <string name="check_out_orders">Check Out Orders</string>
+    <string name="item_price">Item Price</string>
 
     <string-array name="item_options_array">
         <item>All Items</item>
