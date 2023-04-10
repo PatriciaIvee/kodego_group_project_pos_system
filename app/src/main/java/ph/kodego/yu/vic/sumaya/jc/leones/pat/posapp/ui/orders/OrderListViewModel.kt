@@ -13,16 +13,13 @@ class OrderListViewModel: ViewModel() {
     val orders: MutableLiveData<List<Order>?>
         get() = _orders
 
-    init {
-        _orders.value = mutableListOf()
+    fun setTotalOrderQuantity(quantity: Int) {
+        totalOrderQuantity.value = quantity
     }
 
-    fun addOrder(order: Order) {
-        val orders = _orders.value?.toMutableList()
-        orders?.add(order)
-        _orders.value = orders
-        // Update the total order quantity
-        totalOrderQuantity.value = getTotalOrderQuantity(orders ?: emptyList())
+    init {
+        _orders.value = mutableListOf()
+        totalOrderQuantity.value = 0 // Initialize to 0 here
     }
 
     private fun getTotalOrderQuantity(orders: List<Order>): Int {

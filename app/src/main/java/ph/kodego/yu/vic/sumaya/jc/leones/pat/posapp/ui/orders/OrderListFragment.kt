@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.OrderListAdapter
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentOrderListBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.SwipeCallBack
 
 
 class OrderListFragment : Fragment() {
@@ -21,6 +23,7 @@ class OrderListFragment : Fragment() {
     private lateinit var orderListAdapter: OrderListAdapter
     private val viewModel: OrderListViewModel by activityViewModels()
     private var orders: ArrayList<Order> = ArrayList()
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,13 @@ class OrderListFragment : Fragment() {
 
         viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
 
+        //SWIPE ORDER LIST
+        val swipeCallBack = SwipeCallBack(0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+        swipeCallBack.orderListAdapter = orderListAdapter
+        itemTouchHelper = ItemTouchHelper(swipeCallBack)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerOrderList)
+
         return binding.root
     }
 
@@ -62,6 +72,8 @@ class OrderListFragment : Fragment() {
         return totalAmount
     }
 
+    //TOTAL 40 ITEMS
+    //THIS WONT SHOW IMMEDIATELY ON THE BADGES IN ORDERS FRAGMENT AND NAV DRAWER
     private fun init(){
         orders.add(Order("Item 1", 100.0f,R.drawable.ic_baseline_image_24).apply {
             orderQuantity = 1

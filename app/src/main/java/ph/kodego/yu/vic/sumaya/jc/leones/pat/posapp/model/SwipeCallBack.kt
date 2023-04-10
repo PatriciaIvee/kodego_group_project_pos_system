@@ -6,10 +6,11 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.ItemAdapter
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.OrderListAdapter
 
 class SwipeCallBack (dragDirs: Int, swipeDirs:Int) :
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs){
-    var itemAdapter:ItemAdapter? = null
+    var orderListAdapter:OrderListAdapter? = null
     var background: ColorDrawable = ColorDrawable(Color.BLACK)
 
     override fun onMove(
@@ -22,7 +23,7 @@ class SwipeCallBack (dragDirs: Int, swipeDirs:Int) :
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        itemAdapter!!.removeItem(position)
+        orderListAdapter!!.removeOrder(position)
     }
 
     override fun onChildDraw(

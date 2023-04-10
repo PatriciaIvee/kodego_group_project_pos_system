@@ -22,9 +22,6 @@ class OrdersFragment : Fragment() {
     private val binding get() = _binding!!
     private var actionOrderListBadge: TextView? = null
 
-    //badgeCount for items to be charged in orderListFragment (sample)
-    private var badgeCount = 6
-
     private val viewModel: OrderListViewModel by activityViewModels()
 
     private lateinit var itemAdapter: ItemAdapter
@@ -35,10 +32,28 @@ class OrdersFragment : Fragment() {
         setHasOptionsMenu(true)
         init()
     }
-    override fun onStart() {
-        super.onStart()
-    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Load the OrderListFragment in the background
+        //Because the badge will only load when the OrderListFragment is opened
+        val fragmentManager = requireActivity().supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(OrderListFragment(), "orderListFragment")
+        fragmentTransaction.commitNow()
+
+        // Retrieve the total order quantity from the OrderListViewModel
+        val totalOrderQuantity = viewModel.totalOrderQuantity.value
+
+        // Use the total order quantity as needed
+        if (totalOrderQuantity != null && totalOrderQuantity > 0) {
+            actionOrderListBadge?.text = totalOrderQuantity.toString()
+            actionOrderListBadge?.visibility = View.VISIBLE
+        } else {
+            actionOrderListBadge?.visibility = View.GONE
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +64,7 @@ class OrdersFragment : Fragment() {
         binding.recyclerItem.adapter = itemAdapter
         binding.recyclerItem.layoutManager = GridLayoutManager(requireContext(),3)
 
+        updateBadge()
         //ADDS STRING ARRAY FROM STRING RESOURCES
         context?.let {
             ArrayAdapter.createFromResource(
@@ -77,14 +93,6 @@ class OrdersFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.order_fragment_menu, menu)
 
@@ -92,12 +100,19 @@ class OrdersFragment : Fragment() {
         menuItem.setActionView(R.layout.order_fragment_action_image_badge)
 
         val actionView = menuItem.actionView
-            actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
-            updateBadge(menu)
-            actionView.setOnClickListener {
-                // Navigate to the orderList fragment
-                findNavController().navigate(R.id.action_nav_orders_to_orderListFragment)
-            }
+        actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
+        // Update the badge with the current total order quantity
+        if (viewModel.totalOrderQuantity.value!! > 0) {
+            actionOrderListBadge?.text = viewModel.totalOrderQuantity.value.toString()
+            actionOrderListBadge?.visibility = View.VISIBLE
+        } else {
+            actionOrderListBadge?.visibility = View.GONE
+        }
+
+        actionView.setOnClickListener {
+            // Navigate to the orderList fragment
+            findNavController().navigate(R.id.action_nav_orders_to_orderListFragment)
+        }
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -118,22 +133,16 @@ class OrdersFragment : Fragment() {
 
     //badge does not immediately update when I start the app.
     // Only updates after opening OrderListFragment
-    private fun updateBadge(menu: Menu) {
+    private fun updateBadge() {
         viewModel.totalOrderQuantity.observe(viewLifecycleOwner) { totalOrderQuantity ->
-//             Update the UI with the new total order quantity
-            val menuItem = menu?.findItem(R.id.action_order_list)
-            val actionView = menuItem?.actionView
-//                actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
-
-            if (totalOrderQuantity > 0) {
-                // Show the badge if the count is greater than 0
-                actionOrderListBadge?.text = totalOrderQuantity.toString()
-                actionOrderListBadge?.visibility = View.VISIBLE
-            } else {
-                // Hide the badge if the count is 0
-                actionOrderListBadge?.visibility = View.GONE
+            actionOrderListBadge?.let { badge ->
+                if (totalOrderQuantity > 0) {
+                    badge.text = totalOrderQuantity.toString()
+                    badge.visibility = View.VISIBLE
+                } else {
+                    badge.visibility = View.GONE
+                }
             }
-
         }
     }
 
