@@ -6,15 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.OrderListItemBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 
 class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
     : RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder>(), Filterable {
 
     var filteredOrders:List<Order> = ArrayList<Order>()
     var all_orders = ArrayList<Order>()
+    private var dbOrderHistory = Firebase.firestore
+    private val orderHistoryList: ArrayList<OrderHistory> = ArrayList()
+    private var uid: String = ""
+    private var dbRef= Firebase.firestore
 
     fun addOrder(order: Order){
         orders.add(0,order)
@@ -24,7 +34,34 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
     fun removeOrder(position: Int){
         orders.removeAt(position)
         notifyItemRemoved(position)
+        saveChanges()
     }
+
+    private fun saveChanges() {
+        dbOrderHistory = FirebaseFirestore.getInstance()
+
+        dbOrderHistory.collection("latestOrder").whereEqualTo("served",false).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                for (data in it.documents){
+                    val orderHistory: OrderHistory? = data.toObject(OrderHistory::class.java)
+                    if (orderHistory != null) {
+                        orderHistoryList.add(orderHistory)
+                        uid = orderHistoryList[0].uid.toString()
+                        var orderMap = hashMapOf(
+                            "uid" to uid,
+                            "orderList" to orders
+                        )
+                        dbRef.collection("order").document(uid).set(orderMap)
+                            .addOnSuccessListener {
+                            }
+                    }
+                }
+            }
+        }.addOnFailureListener{
+//                Toast.makeText(activity, "Order collection failed.", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
     fun updateOrder(newOrders:ArrayList<Order>){
         orders.clear()

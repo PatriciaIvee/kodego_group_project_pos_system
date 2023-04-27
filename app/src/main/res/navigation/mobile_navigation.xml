@@ -20,7 +20,11 @@
         android:id="@+id/nav_orders_order_list"
         android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrderListFragment"
         android:label="Orders"
-        tools:layout="@layout/fragment_order_list" />
+        tools:layout="@layout/fragment_order_list" >
+        <action
+            android:id="@+id/action_nav_orders_order_list_to_nav_orders"
+            app:destination="@id/nav_orders" />
+    </fragment>
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_items"-->
