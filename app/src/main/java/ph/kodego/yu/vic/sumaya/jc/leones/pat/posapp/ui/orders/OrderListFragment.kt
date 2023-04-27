@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,13 @@ class OrderListFragment : Fragment() {
         itemTouchHelper = ItemTouchHelper(swipeCallBack)
         itemTouchHelper.attachToRecyclerView(binding.recyclerOrderList)
 
+        //CHARGE BUTTON
+        binding.btnCharge.setOnClickListener {
+            // TODO: GET OrderNo. Items everything about the transaction/order
+            //TODO: SEND TO RECEIPTS
+            Toast.makeText(requireContext(),"Order Charged.", Toast.LENGTH_SHORT).show()
+        }
+
         return binding.root
     }
 
@@ -73,7 +81,6 @@ class OrderListFragment : Fragment() {
     }
 
     //TOTAL 40 ITEMS
-    //THIS WONT SHOW IMMEDIATELY ON THE BADGES IN ORDERS FRAGMENT AND NAV DRAWER
     private fun init(){
         orders.add(Order("Item 1", 100.0f,R.drawable.ic_baseline_image_24).apply {
             orderQuantity = 1

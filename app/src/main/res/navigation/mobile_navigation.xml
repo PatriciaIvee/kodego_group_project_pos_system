@@ -29,6 +29,12 @@
         tools:layout="@layout/fragment_items" />
 
     <fragment
+        android:id="@+id/nav_items_list"
+        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.items.ItemListFragment"
+        android:label="Items"
+        tools:layout="@layout/fragment_items" />
+
+    <fragment
         android:id="@+id/nav_sales"
         android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.sales.SalesFragment"
         android:label="Sales"

@@ -43,7 +43,7 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
         viewtype: Int
     ):OrderListAdapter.OrderListViewHolder {
 
-        //NewFilterStudents CRUD
+        //NewFilterOrders CRUD
         all_orders.clear()
         all_orders.addAll(orders)
 
@@ -72,13 +72,13 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
             itemView.setOnClickListener(this)
         }
 
-        private fun computeTotalItemQuantity(orders:List<Order>):Int{
-            var totalQuantity = 0
-            for (order in orders) {
-                totalQuantity += order.orderQuantity
-            }
-            return totalQuantity
-        }
+//        private fun computeTotalItemQuantity(orders:List<Order>):Int{
+//            var totalQuantity = 0
+//            for (order in orders) {
+//                totalQuantity += order.orderQuantity
+//            }
+//            return totalQuantity
+//        }
 
         fun bindItem(order: Order){
             this.order = order

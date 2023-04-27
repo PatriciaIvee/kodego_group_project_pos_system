@@ -7,61 +7,54 @@
     android:layout_height="match_parent"
     tools:context=".ui.orders.OrdersFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_charge"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:text="Charge \n 00.00"
-        android:layout_marginTop="60dp"
-        android:textColor="@drawable/btn_text_pressed"
-        android:background="@drawable/button"
-        app:layout_constraintBottom_toTopOf="@id/text_total_amount_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_charge"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:text="Charge \n 00.00"
+            android:layout_marginTop="60dp"
+            android:textColor="@drawable/btn_text_pressed"
+            android:background="@drawable/button"
+            app:layout_constraintBottom_toTopOf="@id/item_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- This Can Be Removed since the button can have the amount-->
-    <TextView
-        android:id="@+id/text_total_amount_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="--"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/item_spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_charge" />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/item_spinner"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Spinner.Underlined"
-        app:layout_constraintEnd_toStartOf="@id/btn_search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recycler_item"
-        app:layout_constraintTop_toBottomOf="@+id/text_total_amount_2" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/item_spinner"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            app:layout_constraintEnd_toStartOf="@id/btn_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recycler_item"
+            app:layout_constraintTop_toBottomOf="@+id/btn_charge"
+            android:layout_marginTop="16dp"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search"
-        android:drawableStart="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_item"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/item_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/text_total_amount_2" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/btn_charge" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_item"
-        android:layout_width="match_parent"
-        android:layout_height="550dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_spinner" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_item"
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_spinner"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="24dp"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
