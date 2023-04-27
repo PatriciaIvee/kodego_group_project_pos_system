@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/bottom_dialogue"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.items.ItemsFragment"
+    android:background="@drawable/bottom_sheet_item_fragment_background"
     android:orientation="vertical"
     android:weightSum="20">
 
@@ -16,6 +18,7 @@
         android:textSize="20sp"
         android:fontFamily="@font/roboto_bold"
         android:layout_weight="1"
+        android:layout_marginVertical="@dimen/activity_horizontal_margin"
         android:paddingHorizontal="16dp"
         android:paddingTop="16dp"
         />
