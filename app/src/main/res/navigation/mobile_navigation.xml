@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_orders"
         android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrdersFragment"
-        android:label="Orders"
+        android:label="Items"
         tools:layout="@layout/fragment_orders" >
 
         <action android:id="@+id/action_nav_orders_to_orderListFragment"
@@ -22,11 +22,11 @@
         android:label="Orders"
         tools:layout="@layout/fragment_order_list" />
 
-    <fragment
-        android:id="@+id/nav_items"
-        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.items.ItemsFragment"
-        android:label="Items"
-        tools:layout="@layout/fragment_items" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_items"-->
+<!--        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.items.ItemsFragment"-->
+<!--        android:label="Items"-->
+<!--        tools:layout="@layout/fragment_items" />-->
 
     <fragment
         android:id="@+id/nav_items_list"
@@ -46,9 +46,9 @@
         android:label="Receipts"
         tools:layout="@layout/fragment_receipts" />
 
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_receipts" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_settings"-->
+<!--        android:name="ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.settings.SettingsFragment"-->
+<!--        android:label="Settings"-->
+<!--        tools:layout="@layout/fragment_receipts" />-->
 </navigation>
