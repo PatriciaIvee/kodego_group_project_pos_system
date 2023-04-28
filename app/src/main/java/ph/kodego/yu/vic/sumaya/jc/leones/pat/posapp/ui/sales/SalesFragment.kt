@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,13 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentSalesBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.SalesSummary
 
 class SalesFragment : Fragment() {
     private lateinit var binding: FragmentSalesBinding
+    private var db = Firebase.firestore
+    private var ordersList: ArrayList<OrderList> = ArrayList()
+    private var orderList = ArrayList<Order>()
+    private var numberOfSales = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,20 +52,41 @@ class SalesFragment : Fragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
+
         salesUiContainer.addView(salesView)
 
-        // Render the SalesSummaryScreen composable UI inside the salesUI
-        salesView.setContent {
-            SalesSummaryScreen()
+        db = FirebaseFirestore.getInstance()
+
+        db.collection("order").get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                for (data in it.documents){
+                    val order: OrderList? = data.toObject(OrderList::class.java)
+                    if (order != null) {
+                        ordersList.add(order)
+                    }
+                }
+                for (ordersOrders in ordersList) {
+                    numberOfSales ++
+                    for (ordersOrdersOrders in ordersOrders.orderList) {
+                        orderList.add(ordersOrdersOrders)
+                    }
+                }
+
+                salesView.setContent {
+                    SalesSummaryScreen()
+                }
+
+
+            } else {
+            }
         }
+            .addOnFailureListener{
+                Toast.makeText(activity, "Order collection failed.", Toast.LENGTH_LONG).show()
+            }
     }
 
     @Composable
     fun SalesSummaryScreen() {
-
-        val orderList = listOf(
-            Order("item 1", 1.0f, R.drawable.ic_baseline_image_24),
-            Order("item 2", 3.0f, R.drawable.ic_baseline_image_24))
 
         Column(
             modifier = Modifier
@@ -67,7 +97,7 @@ class SalesFragment : Fragment() {
                 text = "Total Sales: ₱${getSalesSummary(orderList).totalSales}",
                 style = MaterialTheme.typography.h4
             )
-
+            Toast.makeText(requireContext().applicationContext, "${orderList.size}", Toast.LENGTH_SHORT).show()
             Text(
                 text = "Number of Sales: ${getSalesSummary(orderList).numSales}",
                 style = MaterialTheme.typography.h4
@@ -82,9 +112,9 @@ class SalesFragment : Fragment() {
 
     fun getSalesSummary(orders: List<Order>): SalesSummary {
 
-        val totalSales = orders.sumOf { it.itemPrice.toDouble() }
-        val numSales = orders.size
-        val avgSale = if (numSales > 0) totalSales / numSales else 0.0
+        var totalSales = orders.sumOf { it.itemPrice.toDouble() }
+        var numSales = numberOfSales
+        var avgSale = if (numSales > 0) totalSales / numSales else 0.0
 
         return SalesSummary(totalSales, numSales, avgSale)
     }
