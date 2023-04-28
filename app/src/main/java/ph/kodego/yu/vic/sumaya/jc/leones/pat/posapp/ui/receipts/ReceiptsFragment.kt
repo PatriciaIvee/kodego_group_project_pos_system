@@ -114,16 +114,18 @@ class ReceiptsFragment : Fragment() {
 
     @Composable
     fun ReceiptItemRow() {
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(orders.orderList.size) {
-                Box() {
-                    Column() {
+        Column() {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                items(orders.orderList.size) {
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
                         Text(
                             text = "Order ID\n${orders.orderList[it].orderId}",
                             fontSize = 18.sp
@@ -132,8 +134,8 @@ class ReceiptsFragment : Fragment() {
                             text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
                             fontSize = 20.sp
                         )
-                        Divider(modifier = Modifier.fillMaxWidth())
                     }
+                    Divider(modifier = Modifier.fillMaxWidth())
                 }
             }
         }
