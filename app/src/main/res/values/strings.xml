@@ -31,12 +31,12 @@
 
     <string-array name="item_options_array">
         <item>All Items</item>
-        <item>Item Category 1</item>
-        <item>Item Category 2</item>
-        <item>Item Category 3</item>
-        <item>Item Category 4</item>
-        <item>Item Category 5</item>
-        <item>Item Category 6</item>
-        <item>Item Category 7</item>
+        <item>Discounts</item>
+        <item>Add-Ons</item>
+        <item>Coffee</item>
+        <item>Latte</item>
+        <item>Non-Coffee</item>
+        <item>Pastries</item>
+        <item>Specials</item>
     </string-array>
 </resources>
