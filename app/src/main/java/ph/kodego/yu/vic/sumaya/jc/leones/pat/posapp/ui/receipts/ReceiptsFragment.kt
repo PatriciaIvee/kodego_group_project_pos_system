@@ -71,7 +71,7 @@ class ReceiptsFragment : Fragment() {
                         ordersList.add(order)
                     }
                 }
-                orders = ordersList[5]
+                orders = ordersList[0]
 //                for (ordersOrders in ordersList) {
 //                    orders
 //                }
