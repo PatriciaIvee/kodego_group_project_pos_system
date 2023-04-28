@@ -7,12 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.OrderListAdapter
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentOrderListBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.SwipeCallBack
 
 
@@ -24,7 +30,14 @@ class OrderListFragment : Fragment() {
     private lateinit var orderListAdapter: OrderListAdapter
     private val viewModel: OrderListViewModel by activityViewModels()
     private var orders: ArrayList<Order> = ArrayList()
+    private var ordersList: ArrayList<OrderList> = ArrayList()
     private lateinit var itemTouchHelper: ItemTouchHelper
+
+    private var db = Firebase.firestore
+    private var dbOrderHistory = Firebase.firestore
+    private var uid = ""
+    private val orderHistoryList: ArrayList<OrderHistory> = ArrayList()
+    private var dbLatestOrder = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,11 +71,69 @@ class OrderListFragment : Fragment() {
         binding.btnCharge.setOnClickListener {
             // TODO: GET OrderNo. Items everything about the transaction/order
             //TODO: SEND TO RECEIPTS
+            orderHistoryList[0].served = true
+            saveServedStatus()
             Toast.makeText(requireContext(),"Order Charged.", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_nav_orders_order_list_to_nav_orders)
         }
+
+        dbOrderHistory = FirebaseFirestore.getInstance()
+        dbOrderHistory.collection("latestOrder").whereEqualTo("served",false).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                for (data in it.documents){
+                    val orderHistory: OrderHistory? = data.toObject(OrderHistory::class.java)
+                    if (orderHistory != null) {
+                        orderHistoryList.add(orderHistory)
+                    }
+                }
+            }
+            if (orderHistoryList.isNotEmpty()) {
+                uid = orderHistoryList[0].uid.toString()
+                db = FirebaseFirestore.getInstance()
+
+                db.collection("order").whereEqualTo("uid", uid).get().addOnSuccessListener { it2->
+                    if (!it2.isEmpty) {
+                        for (data in it2.documents){
+                            val order: OrderList? = data.toObject(OrderList::class.java)
+                            if (order != null) {
+                                ordersList.add(order)
+                                orderListAdapter.notifyDataSetChanged()
+                            }
+                        }
+                        for (ordersOrders in ordersList) {
+                            for (ordersOrdersOrders in ordersOrders.orderList) {
+                                orders.add(ordersOrdersOrders)
+                            }
+                        }
+                    } else {
+                    }
+                }
+                    .addOnFailureListener{
+                        Toast.makeText(activity, "Order collection failed.", Toast.LENGTH_LONG).show()
+                    }
+            }
+        }.addOnFailureListener{
+//                Toast.makeText(activity, "Order collection failed.", Toast.LENGTH_LONG).show()
+        }
+
+
+
 
         return binding.root
     }
+
+    private fun saveServedStatus() {
+        var orderHistoryMap = hashMapOf(
+            "uid" to orderHistoryList[0].uid,
+            "served" to orderHistoryList[0].served
+        )
+
+        dbLatestOrder.collection("latestOrder").document(uid).set(orderHistoryMap)
+            .addOnSuccessListener {
+
+            }
+    }
+
 
     private fun getTotalOrderQuantity(orders: List<Order>): Int {
         var totalQuantity = 0
@@ -82,21 +153,8 @@ class OrderListFragment : Fragment() {
 
     //TOTAL 40 ITEMS
     private fun init(){
-        orders.add(Order("Item 1", 100.0f,R.drawable.ic_baseline_image_24).apply {
-            orderQuantity = 1
-        })
-        orders.add(Order("Item 2", 200.0f,R.drawable.ic_baseline_image_24).apply {
-            orderQuantity = 5
-        })
-        orders.add(Order("Item 3", 100.0f,R.drawable.ic_baseline_image_24).apply {
-            orderQuantity = 23
-        })
-        orders.add(Order("Item 4", 100.0f,R.drawable.ic_baseline_image_24).apply {
-            orderQuantity = 3
-        })
-        orders.add(Order("Item 5", 100.0f,R.drawable.ic_baseline_image_24).apply {
-            orderQuantity = 8
-        })
+
+
     }
 
 
