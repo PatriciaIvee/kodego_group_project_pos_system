@@ -14,7 +14,6 @@ open class Item (var itemName: String = "", var itemPrice: Float = 0.0f,var img:
 
 class Order(itemName: String = "",itemPrice: Float = 0.0f,img:Int): Item (itemName, itemPrice, img){
 
-
     var orderId: Int = 0
     //ORDER_TOTAL IS ALWAYS INITIALIZED TO 0 HERE
     //ORDER_TOTAL NEEDS TO BE UPDATED WHEN ORDER QUANTITY IS UPDATED
