@@ -7,25 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentReceiptsBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 
 class ReceiptsFragment : Fragment() {
 
     private var _binding: FragmentReceiptsBinding? = null
     private val binding get() = _binding!!
+    private var order: Order = Order()
+    private var orders: OrderList = OrderList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,14 +60,10 @@ class ReceiptsFragment : Fragment() {
     @Composable
     fun ReceiptScreen() {
 
-        val items = listOf(
-            Order("item 1", 1.0f, R.drawable.ic_baseline_image_24),
-            Order("item 2", 3.0f, R.drawable.ic_baseline_image_24))
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             Text(
                 text = "Receipt",
@@ -78,46 +76,36 @@ class ReceiptsFragment : Fragment() {
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                items(items) { item ->
-                    ReceiptItemRow(item)
+                items(orders.orderList.size) {
+                    ReceiptItemRow()
+                    Divider(modifier = Modifier.fillMaxWidth())
                 }
-            }
-            Divider(modifier = Modifier.fillMaxWidth())
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Total:",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "₱${items.sumOf { it.itemPrice.toDouble() }}",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.Bold
-                )
             }
         }
     }
 
     @Composable
-    fun ReceiptItemRow(item: Order) {
+    fun ReceiptItemRow() {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Order #${item.orderId}",
+                text = "Order #${order.orderId}",
                 fontSize = 18.sp)
             Text(
-                text = item.itemName,
-                fontSize = 20.sp)
-            Text(
-                text = "₱${item.itemPrice}",
+                text = "₱${order.orderTotal}",
                 fontSize = 20.sp)
         }
     }
+
+    @Preview
+    @Composable
+    fun ReceiptScreenPreview() {
+        ReceiptScreen()
+    }
+
 }
