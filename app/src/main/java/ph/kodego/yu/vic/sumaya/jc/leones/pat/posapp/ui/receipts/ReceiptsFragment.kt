@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -64,7 +65,7 @@ class ReceiptsFragment : Fragment() {
 
         db.collection("order").get().addOnSuccessListener {
             if (!it.isEmpty) {
-                for (data in it.documents){
+                for (data in it.documents) {
                     val order: OrderList? = data.toObject(OrderList::class.java)
                     if (order != null) {
                         ordersList.add(order)
@@ -82,7 +83,7 @@ class ReceiptsFragment : Fragment() {
             } else {
             }
         }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Toast.makeText(activity, "Order collection failed.", Toast.LENGTH_LONG).show()
             }
     }
@@ -116,19 +117,25 @@ class ReceiptsFragment : Fragment() {
 
     @Composable
     fun ReceiptItemRow() {
-        Row(
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "OrderID\n${orders.orderList[0].orderId}",
-                fontSize = 18.sp)
-            Text(
-                text = "₱${orders.orderList[0].itemPrice * orders.orderList[0].orderQuantity}",
-                fontSize = 20.sp)
+            items(orders.orderList.size) {
+                Box() {
+                    Text(
+                        text = "Order ID\n${orders.orderList[it].orderId}",
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
+                        fontSize = 20.sp
+                    )
+                }
+            }
         }
     }
 
