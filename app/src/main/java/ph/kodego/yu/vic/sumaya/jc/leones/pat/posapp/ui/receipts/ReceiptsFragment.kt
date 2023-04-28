@@ -102,15 +102,12 @@ class ReceiptsFragment : Fragment() {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                items(orders.orderList.size) {
                     ReceiptItemRow()
-                    Divider(modifier = Modifier.fillMaxWidth())
-                }
             }
         }
     }
@@ -126,23 +123,26 @@ class ReceiptsFragment : Fragment() {
         ) {
             items(orders.orderList.size) {
                 Box() {
-                    Text(
-                        text = "Order ID\n${orders.orderList[it].orderId}",
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
-                        fontSize = 20.sp
-                    )
+                    Column() {
+                        Text(
+                            text = "Order ID\n${orders.orderList[it].orderId}",
+                            fontSize = 18.sp
+                        )
+                        Text(
+                            text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
+                            fontSize = 20.sp
+                        )
+                        Divider(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             }
         }
     }
 
-//    @Preview
-//    @Composable
-//    fun ReceiptScreenPreview() {
-//        ReceiptScreen()
-//    }
+    @Preview
+    @Composable
+    fun ReceiptScreenPreview() {
+        ReceiptScreen()
+    }
 
 }
