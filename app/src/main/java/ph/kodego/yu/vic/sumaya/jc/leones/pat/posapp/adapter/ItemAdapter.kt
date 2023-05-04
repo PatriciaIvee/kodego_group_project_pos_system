@@ -20,6 +20,7 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Item
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrderListViewModel
 import java.time.LocalDateTime
 
 class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
@@ -38,6 +39,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
     private val orderHistoryList: ArrayList<OrderHistory> = ArrayList()
     private var db = Firebase.firestore
     private var ordersList: ArrayList<OrderList> = ArrayList()
+    private lateinit var viewModel: OrderListViewModel
 
 
 
@@ -114,7 +116,6 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
                                 }
                             }
                         }
-                    } else {
                     }
                 }
                     .addOnFailureListener{
@@ -154,7 +155,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
             //SET UI AND CLASS ITEM
             itemBinding.itemName.text = item.itemName
             itemBinding.textStock.text = "${item.itemStock.toString()} available"
-            itemBinding.itemPrice.text = "$ ${item.itemPrice.toString()}"
+            itemBinding.itemPrice.text = "₱ ${item.itemPrice.toString()}"
 
             //SET THE IMAGE
             itemBinding.imgItem.setImageResource(item.img)
@@ -181,14 +182,19 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
             var new: Boolean = true
             order = Order(item.itemName, item.itemPrice, item.img)
             orderHistory = OrderHistory(uid,false)
+
+
+
             if (orders.isEmpty()) {
                 orders.add(order)
                 orders[0].orderId = uid
                 orders[0].orderQuantity = 1
+                orders[0].orderTotal = order.itemPrice
             } else {
                 for (newOrder in orders) {
                     if (newOrder.itemName == order.itemName) {
                         newOrder.orderQuantity++
+                        newOrder.orderTotal = (newOrder.itemPrice * newOrder.orderQuantity).toFloat()
                         new = false
                         break
                     }
@@ -226,7 +232,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
                 }
             dbRef.collection("order").document(uid).set(orderMap)
                 .addOnSuccessListener {
-                    Toast.makeText(activity, "Ordered ${item.itemName}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Ordered ${item.itemName} ,${item.itemPrice}", Toast.LENGTH_SHORT).show()
                     }
             }
         }

@@ -33,6 +33,8 @@ class OrderListFragment : Fragment() {
     private var ordersList: ArrayList<OrderList> = ArrayList()
     private lateinit var itemTouchHelper: ItemTouchHelper
 
+
+
     private var db = Firebase.firestore
     private var dbOrderHistory = Firebase.firestore
     private var uid = ""
@@ -41,7 +43,6 @@ class OrderListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        init()
     }
 
     override fun onCreateView(
@@ -54,11 +55,11 @@ class OrderListFragment : Fragment() {
         binding.recyclerOrderList.layoutManager = LinearLayoutManager(requireContext())
 
         //UPDATE TOTAL AMOUNT
-        binding.textTotalAmount.text = computeTotalItemAmount(orders).toString()
-        //UPDATE TOTAL ORDER QUANTITY
-        binding.textTotalQuantity.text = "${getTotalOrderQuantity(orders).toString()} items"
-
-        viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
+//        binding.textTotalAmount.text = computeTotalItemAmount(orders).toString()
+//        //UPDATE TOTAL ORDER QUANTITY
+//        binding.textTotalQuantity.text = "${getTotalOrderQuantity(orders).toString()} items"
+//
+//        viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
 
         //SWIPE ORDER LIST
         val swipeCallBack = SwipeCallBack(0,
@@ -69,8 +70,6 @@ class OrderListFragment : Fragment() {
 
         //CHARGE BUTTON
         binding.btnCharge.setOnClickListener {
-            // TODO: GET OrderNo. Items everything about the transaction/order
-            //TODO: SEND TO RECEIPTS
             orderHistoryList[0].served = true
             saveServedStatus()
             Toast.makeText(requireContext(),"Order Charged.", Toast.LENGTH_SHORT).show()
@@ -100,12 +99,21 @@ class OrderListFragment : Fragment() {
                                 orderListAdapter.notifyDataSetChanged()
                             }
                         }
+                        var totalOrders = 0
+                        var totalPrice = 0.0f
                         for (ordersOrders in ordersList) {
                             for (ordersOrdersOrders in ordersOrders.orderList) {
                                 orders.add(ordersOrdersOrders)
+
+                                totalOrders += ordersOrdersOrders.orderQuantity
+                                totalPrice += ordersOrdersOrders.orderTotal
+
                             }
                         }
-                    } else {
+                        binding.textTotalQuantity.text = totalOrders.toString()
+                        binding.textTotalAmount.text = totalPrice.toString()
+                        binding.btnCharge.text = "Charge : $totalPrice"
+                        viewModel.totalOrderQuantity.value = totalOrders
                     }
                 }
                     .addOnFailureListener{
@@ -135,27 +143,21 @@ class OrderListFragment : Fragment() {
     }
 
 
-    private fun getTotalOrderQuantity(orders: List<Order>): Int {
-        var totalQuantity = 0
-        for (order in orders) {
-            totalQuantity += order.orderQuantity
-        }
-        return totalQuantity
-    }
-
-    private fun computeTotalItemAmount(orders: List<Order>): Float {
-        var totalAmount = 0.0f
-        for (order in orders) {
-            totalAmount += order.orderTotal
-        }
-        return totalAmount
-    }
-
-    //TOTAL 40 ITEMS
-    private fun init(){
-
-
-    }
+//    private fun getTotalOrderQuantity(orders: List<Order>): Int {
+//        var totalQuantity = 0
+//        for (order in orders) {
+//            totalQuantity += order.orderQuantity
+//        }
+//        return totalQuantity
+//    }
+//
+//    private fun computeTotalItemAmount(orders: List<Order>): Float {
+//        var totalAmount = 0.0f
+//        for (order in orders) {
+//            totalAmount += order.orderTotal
+//        }
+//        return totalAmount
+//    }
 
 
 }

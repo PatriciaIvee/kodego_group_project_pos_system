@@ -18,14 +18,25 @@ class Order(itemName: String = "",itemPrice: Float = 0.0f,img:Int): Item (itemNa
     var orderId: String? = null
     //ORDER_TOTAL IS ALWAYS INITIALIZED TO 0 HERE
     //ORDER_TOTAL NEEDS TO BE UPDATED WHEN ORDER QUANTITY IS UPDATED
+//    var orderQuantity: Int = 0
+////        set(value) {
+////            field = value
+////            orderTotal = value * itemPrice
+////            totalOrderQuantity += value
+////        }
+
     var orderQuantity: Int = 0
-//        set(value) {
-//            field = value
-//            orderTotal = value * itemPrice
-//            totalOrderQuantity += value
-//        }
-    var orderTotal = orderQuantity * itemPrice
+        set(value) {
+            field = value
+            orderTotal = value * itemPrice
+        }
+    var orderTotal: Float = 0.0f
+
+    //    var orderTotal = orderQuantity * itemPrice
     var totalOrderQuantity :Int = 0
 
     constructor() : this("",0.0f, R.drawable.ic_baseline_image_24)
+//    init {
+//        this.orderTotal = this.orderQuantity * this.itemPrice
+//    }
 }

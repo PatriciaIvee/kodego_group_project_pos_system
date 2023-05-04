@@ -1,9 +1,11 @@
 package ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,12 +15,15 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.adapter.ItemAdapter
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentOrdersBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Item
+import java.util.*
+import kotlin.collections.ArrayList
 
 class OrdersFragment : Fragment() {
 
     private var _binding: FragmentOrdersBinding? = null
     private val binding get() = _binding!!
     private var actionOrderListBadge: TextView? = null
+    private var actionViewBackgroundBadge: ImageView? = null
 
     private val viewModel: OrderListViewModel by activityViewModels()
 
@@ -80,13 +85,38 @@ class OrdersFragment : Fragment() {
         _binding!!.itemSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // Perform actions when an option is selected
-                val selectedItem = parent?.getItemAtPosition(position).toString()
-                // Do something with the selected item
+                val category = parent?.getItemAtPosition(position) as String
+                val filteredItems = if (category == "All Items") {
+                    items
+                } else {
+                    items.filter { it.category == category }
+                }
+
+                if (filteredItems.isEmpty()) {
+                    binding.textNoItemsAvailable.visibility = View.VISIBLE
+                } else {
+                    binding.textNoItemsAvailable.visibility = View.GONE
+                }
+
+                itemAdapter.items = filteredItems as ArrayList<Item>
+
+                itemAdapter.notifyDataSetChanged()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Perform actions when nothing is selected
             }
+        }
+
+        binding.btnSearch.setOnClickListener {
+            val searchText = binding.searchBarInput.text.toString().toLowerCase(Locale.getDefault())
+            val filteredItems = items.filter {
+                it.itemName
+                    .toLowerCase(Locale.getDefault())
+                    .contains(searchText) }
+            itemAdapter.items = filteredItems as ArrayList<Item>
+            itemAdapter.notifyDataSetChanged()
+
         }
         return binding.root
     }
@@ -99,13 +129,9 @@ class OrdersFragment : Fragment() {
 
         val actionView = menuItem.actionView
         actionOrderListBadge = actionView!!.findViewById(R.id.action_order_list_badge)
+        actionViewBackgroundBadge = actionView!!.findViewById(R.id.circle_image)
         // Update the badge with the current total order quantity
-        if (viewModel.totalOrderQuantity.value!! > 0) {
-            actionOrderListBadge?.text = viewModel.totalOrderQuantity.value.toString()
-            actionOrderListBadge?.visibility = View.VISIBLE
-        } else {
-            actionOrderListBadge?.visibility = View.GONE
-        }
+        updateBadge()
 
         actionView.setOnClickListener {
             // Navigate to the orderList fragment
@@ -138,7 +164,14 @@ class OrdersFragment : Fragment() {
                     badge.text = totalOrderQuantity.toString()
                     badge.visibility = View.VISIBLE
                 } else {
-                    badge.visibility = View.GONE
+                    badge.visibility = View.INVISIBLE
+                }
+            }
+            actionViewBackgroundBadge?.let {
+                if (totalOrderQuantity > 0) {
+                    it.visibility = View.VISIBLE
+                } else {
+                    it.visibility = View.INVISIBLE
                 }
             }
         }

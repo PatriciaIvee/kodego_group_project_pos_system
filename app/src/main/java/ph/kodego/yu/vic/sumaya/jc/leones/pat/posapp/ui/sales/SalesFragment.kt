@@ -110,7 +110,7 @@ class SalesFragment : Fragment() {
         }
     }
 
-    fun getSalesSummary(orders: List<Order>): SalesSummary {
+    private fun getSalesSummary(orders: List<Order>): SalesSummary {
 
         var totalSales = orders.sumOf { it.itemPrice.toDouble() }
         var numSales = numberOfSales

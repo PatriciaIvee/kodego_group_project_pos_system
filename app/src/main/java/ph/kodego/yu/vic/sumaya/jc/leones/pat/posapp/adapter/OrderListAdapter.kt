@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -15,26 +17,40 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.OrderListItemBin
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrderListViewModel
 
 class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
-    : RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder>(), Filterable {
+    : RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder>() {
 
     var filteredOrders:List<Order> = ArrayList<Order>()
-    var all_orders = ArrayList<Order>()
+    private var all_orders = ArrayList<Order>()
     private var dbOrderHistory = Firebase.firestore
     private val orderHistoryList: ArrayList<OrderHistory> = ArrayList()
     private var uid: String = ""
     private var dbRef= Firebase.firestore
+    private lateinit var viewModel: OrderListViewModel
+
 
     fun addOrder(order: Order){
         orders.add(0,order)
         notifyItemInserted(0)
+        viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
+    }
+
+    private fun getTotalOrderQuantity(orders: List<Order>): Int {
+        var totalQuantity = 0
+        for (order in orders) {
+            totalQuantity += order.orderQuantity
+        }
+        return totalQuantity
     }
 
     fun removeOrder(position: Int){
         orders.removeAt(position)
         notifyItemRemoved(position)
         saveChanges()
+//        viewModel = OrderListViewModel()
+//        viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
     }
 
     private fun saveChanges() {
@@ -74,6 +90,7 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
         return orders.size
     }
 
+
     override fun onCreateViewHolder(
 //        Sets layout per line (row)
         parent: ViewGroup,
@@ -105,17 +122,10 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
 
         var order = Order()
 
+
         init {
             itemView.setOnClickListener(this)
         }
-
-//        private fun computeTotalItemQuantity(orders:List<Order>):Int{
-//            var totalQuantity = 0
-//            for (order in orders) {
-//                totalQuantity += order.orderQuantity
-//            }
-//            return totalQuantity
-//        }
 
         fun bindItem(order: Order){
             this.order = order
@@ -128,12 +138,8 @@ class OrderListAdapter(var orders: ArrayList<Order>, var activity: Activity)
         }
 
         override fun onClick(v: View?) {
-            TODO("Not yet implemented")
+            Toast.makeText(activity,"you clicked your order", Toast.LENGTH_SHORT).show()
         }
     }
 
-    //SEARCH
-    override fun getFilter(): Filter {
-        TODO("Not yet implemented")
-    }
 }

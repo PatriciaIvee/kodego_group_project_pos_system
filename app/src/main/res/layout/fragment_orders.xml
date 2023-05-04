@@ -7,41 +7,58 @@
     android:layout_height="match_parent"
     tools:context=".ui.orders.OrdersFragment">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_charge"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:text="Charge \n 00.00"
-            android:layout_marginTop="60dp"
-            android:textColor="@drawable/btn_text_pressed"
-            android:background="@drawable/button"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_bar"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             app:layout_constraintBottom_toTopOf="@id/item_spinner"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_bar_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="search"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/item_spinner"
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Spinner.Underlined"
-            app:layout_constraintEnd_toStartOf="@id/btn_search"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/recycler_item"
-            app:layout_constraintTop_toBottomOf="@+id/btn_charge"
-            android:layout_marginTop="16dp"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/recycler_item"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_bar" />
+
+        <ImageView
+            android:id="@+id/btn_search"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_baseline_search_24"
             android:text="@string/search"
-            android:drawableStart="@drawable/ic_baseline_search_24"
-            app:layout_constraintBottom_toTopOf="@+id/recycler_item"
+            android:background="@drawable/button"
+            app:layout_constraintBottom_toBottomOf="@id/search_bar"
+            app:layout_constraintStart_toEndOf="@id/search_bar"
+            app:layout_constraintTop_toTopOf="@id/search_bar" />
+        <TextView
+            android:id="@+id/text_no_items_available"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/btn_search"
+            app:layout_constraintBottom_toTopOf="@id/recycler_item"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_spinner"
-            app:layout_constraintTop_toBottomOf="@+id/btn_charge" />
+            android:text="@string/no_available_items"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:fontFamily="@font/nunito"
+            android:textSize="16sp"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_item"
