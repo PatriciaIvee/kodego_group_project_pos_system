@@ -54,12 +54,6 @@ class OrderListFragment : Fragment() {
         binding.recyclerOrderList.adapter = orderListAdapter
         binding.recyclerOrderList.layoutManager = LinearLayoutManager(requireContext())
 
-        //UPDATE TOTAL AMOUNT
-//        binding.textTotalAmount.text = computeTotalItemAmount(orders).toString()
-//        //UPDATE TOTAL ORDER QUANTITY
-//        binding.textTotalQuantity.text = "${getTotalOrderQuantity(orders).toString()} items"
-//
-//        viewModel.totalOrderQuantity.value = getTotalOrderQuantity(orders)
 
         //SWIPE ORDER LIST
         val swipeCallBack = SwipeCallBack(0,

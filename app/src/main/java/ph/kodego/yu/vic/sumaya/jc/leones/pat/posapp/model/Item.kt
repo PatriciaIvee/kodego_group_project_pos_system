@@ -28,7 +28,7 @@ class Order(itemName: String = "",itemPrice: Float = 0.0f,img:Int): Item (itemNa
     var orderQuantity: Int = 0
         set(value) {
             field = value
-            orderTotal = value * itemPrice
+            orderTotal = if (value == 0) 0.0f else value * itemPrice
         }
     var orderTotal: Float = 0.0f
 
