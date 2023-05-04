@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -91,23 +92,46 @@ class ReceiptsFragment : Fragment() {
     @Composable
     fun ReceiptScreen() {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            Text(
-                text = "Receipt",
-                style = MaterialTheme.typography.h4,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxSize()) {
+
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(20.dp)
+                    .align(Alignment.Center)
             ) {
+                Text(
+                    text = "Receipt",
+                    style = MaterialTheme.typography.h4,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
                     ReceiptItemRow()
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            ) {
+                Button(
+                    onClick = { /* Left button action */ },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Left")
+                }
+                Button(
+                    onClick = { /* Right button action */ },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Right")
+                }
             }
         }
     }
