@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentReceiptsBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
@@ -37,6 +38,8 @@ class ReceiptsFragment : Fragment() {
     private var orders: OrderList = OrderList()
     private var db = Firebase.firestore
     private var ordersList: ArrayList<OrderList> = ArrayList()
+
+    private var currentIndex = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +76,7 @@ class ReceiptsFragment : Fragment() {
                         ordersList.add(order)
                     }
                 }
-                orders = ordersList[0]
+                orders = ordersList[currentIndex]
 //                for (ordersOrders in ordersList) {
 //                    orders
 //                }
@@ -124,24 +127,29 @@ class ReceiptsFragment : Fragment() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Icon(
-                    painter = painterResource(
-                        id = ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R.drawable.ic_baseline_arrow_back_24),
+                    painter = painterResource(id = R.drawable.ic_baseline_arrow_back_24),
                     contentDescription = "Back button",
                     tint = Color.Black,
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        .clickable(onClick = { /* Back button action */ })
+                        .clickable(enabled = currentIndex > 0, onClick = {
+                                currentIndex--
+                                orders = ordersList[currentIndex]
+                            })
                 )
+
                 Icon(
-                    painter = painterResource(
-                        id = ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R.drawable.ic_baseline_arrow_forward_24),
+                    painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_24),
                     contentDescription = "Next button",
                     tint = Color.Black,
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        .clickable(onClick = { /* Next button action */ })
+                        .clickable(enabled = currentIndex < ordersList.size - 1, onClick = {
+                                currentIndex++
+                                orders = ordersList[currentIndex]
+                        })
                 )
             }
         }
