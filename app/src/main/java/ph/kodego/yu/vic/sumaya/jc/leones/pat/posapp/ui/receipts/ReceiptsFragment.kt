@@ -147,8 +147,10 @@ class ReceiptsFragment : Fragment() {
                         .clip(CircleShape)
                         .size(40.dp)
                         .clickable(enabled = currentIndex < ordersList.size - 1, onClick = {
+                            if (currentIndex < ordersList.size - 1) {
                                 currentIndex++
                                 orders = ordersList[currentIndex]
+                            }
                         })
                 )
             }
