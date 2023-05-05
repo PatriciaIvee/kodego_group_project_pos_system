@@ -26,18 +26,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentReceiptsBinding
-import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ReceiptsFragment : Fragment() {
 
     private var _binding: FragmentReceiptsBinding? = null
     private val binding get() = _binding!!
-    private var order: Order = Order()
     private var orders: OrderList = OrderList()
     private var db = Firebase.firestore
     private var ordersList: ArrayList<OrderList> = ArrayList()
@@ -104,9 +99,6 @@ class ReceiptsFragment : Fragment() {
                 orders = ordersList[currentIndex]
 
                 updateReceiptScreen()
-//                for (ordersOrders in ordersList) {
-//                    orders
-//                }
             }
         }
             .addOnFailureListener {
@@ -154,12 +146,17 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        
+
                         .clickable(onClick = {
                             onBackClicked()
                         })
                 )
-
+                Text(
+                    text = "${currentIndex+1}",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_24),
                     contentDescription = "Next button",
@@ -169,7 +166,6 @@ class ReceiptsFragment : Fragment() {
                         .size(40.dp)
                         .clickable(onClick = {
                             onNextClicked()
-
                         })
                 )
             }
@@ -179,10 +175,15 @@ class ReceiptsFragment : Fragment() {
     @Composable
     fun ReceiptItemRow() {
         Box(modifier = Modifier.fillMaxSize()) {
+            for (item in orders.orderList) {
+                Text(text = "Order ID: ${item.orderId!!}",
+                    fontSize = 18.sp)
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .heightIn(max = 560.dp)
+                    .padding(10.dp, top = 40.dp)
             ) {
                 items(orders.orderList.size) {
                     Row(
@@ -192,9 +193,7 @@ class ReceiptsFragment : Fragment() {
                     ) {
 
                         Text(
-                            text = "Order ID: ${orders.orderList[it].orderId}" +
-                                    "\nItem Name: ${orders.orderList[it].itemName}" +
-                                    "\nDate Purchased: ${orders.orderList[it].datePurchased}",
+                            text = "\nItem Name:\n${orders.orderList[it].itemName}",
                             fontSize = 18.sp
                         )
                         Text(
@@ -203,7 +202,7 @@ class ReceiptsFragment : Fragment() {
                         )
                         Text(
                             text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
-                            fontSize = 20.sp
+                            fontSize = 16.sp
                         )
                     }
                     Divider(modifier = Modifier.fillMaxWidth())
@@ -217,7 +216,8 @@ class ReceiptsFragment : Fragment() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.End,
-                modifier = Modifier.align(Alignment.BottomEnd)
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
                     .padding(bottom = 50.dp)
             ) {
                 Text(
