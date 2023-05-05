@@ -65,20 +65,22 @@ class ReceiptsFragment : Fragment() {
 
         fun updateReceiptScreen() {
             receiptsView.setContent {
-                ReceiptScreen(onBackClicked = {
+                ReceiptScreen(
+                    onBackClicked = {
                     if(currentIndex > 0) {
                         currentIndex--
                         orders = ordersList[currentIndex]
                     }
                     updateReceiptScreen()
-                }
-                ) {
+                },
+                    onNextClicked = {
                     if (currentIndex < ordersList.size - 1) {
                         currentIndex++
                         orders = ordersList[currentIndex]
                     }
                     updateReceiptScreen()
-                }
+                })
+
             }
         }
 
@@ -167,17 +169,17 @@ class ReceiptsFragment : Fragment() {
 
     @Composable
     fun ReceiptItemRow() {
-        Column() {
+        Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
                 items(orders.orderList.size) {
-                    Row(verticalAlignment = Alignment.CenterVertically,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
                             text = "Order ID\n${orders.orderList[it].orderId}",
@@ -190,6 +192,27 @@ class ReceiptsFragment : Fragment() {
                     }
                     Divider(modifier = Modifier.fillMaxWidth())
                 }
+            }
+            var totalAmount = 0.0
+            for (item in orders.orderList) {
+                totalAmount += item.itemPrice * item.orderQuantity
+            }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier.align(Alignment.BottomEnd)
+                    .padding(bottom = 50.dp)
+            ) {
+                Text(
+                    text = "Total Amount:",
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "₱ $totalAmount",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
