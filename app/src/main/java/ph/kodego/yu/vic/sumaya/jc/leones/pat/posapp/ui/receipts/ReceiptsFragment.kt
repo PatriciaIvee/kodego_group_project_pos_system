@@ -157,7 +157,7 @@ class ReceiptsFragment : Fragment() {
                         
                         .clickable(onClick = {
                             onBackClicked()
-
+                        })
                 )
 
                 Icon(
@@ -167,7 +167,6 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        
                         .clickable(onClick = {
                             onNextClicked()
 
@@ -234,3 +233,5 @@ class ReceiptsFragment : Fragment() {
         }
     }
 }
+
+
