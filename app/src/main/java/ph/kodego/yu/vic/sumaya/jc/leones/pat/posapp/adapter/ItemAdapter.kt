@@ -22,6 +22,8 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.ui.orders.OrderListViewModel
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
     : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
@@ -32,6 +34,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
     private val orders: ArrayList<Order> = ArrayList()
     private var dbRef= Firebase.firestore
     private var uid: String = ""
+    private var datePurchased: String? = null
     private var order: Order = Order()
     private var dbLatestOrder = Firebase.firestore
     private var orderHistory: OrderHistory = OrderHistory()
@@ -93,6 +96,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
             if (orderHistoryList.isNotEmpty()) {
                 var new : Boolean = true
                 uid = orderHistoryList[0].uid.toString()
+                datePurchased = orderHistoryList[0].datePurchased
                 db = FirebaseFirestore.getInstance()
 
                 db.collection("order").whereEqualTo("uid", uid).get().addOnSuccessListener { it2->
@@ -181,7 +185,7 @@ class ItemAdapter (var items: ArrayList<Item>, var activity: Activity)
         override fun onClick(v: View?) {
             var new: Boolean = true
             order = Order(item.itemName, item.itemPrice, item.img)
-            orderHistory = OrderHistory(uid,false)
+            orderHistory = OrderHistory(uid,datePurchased,false)
 
 
 

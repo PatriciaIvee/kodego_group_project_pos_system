@@ -10,6 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -20,6 +22,8 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderHistory
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.SwipeCallBack
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class OrderListFragment : Fragment() {
@@ -101,6 +105,10 @@ class OrderListFragment : Fragment() {
 
                                 totalOrders += ordersOrdersOrders.orderQuantity
                                 totalPrice += ordersOrdersOrders.orderTotal
+                                // add the datePurchased to the order object
+                                // Order Class
+                                ordersOrdersOrders.datePurchased = Calendar.getInstance()
+                                    .time.toString()
 
                             }
                         }
@@ -125,14 +133,21 @@ class OrderListFragment : Fragment() {
     }
 
     private fun saveServedStatus() {
+        val timestamp = Timestamp(Date())
+
         var orderHistoryMap = hashMapOf(
             "uid" to orderHistoryList[0].uid,
-            "served" to orderHistoryList[0].served
+            "served" to orderHistoryList[0].served,
+            "date_purchased" to timestamp // This will add the current date and time
         )
 
         dbLatestOrder.collection("latestOrder").document(uid).set(orderHistoryMap)
             .addOnSuccessListener {
-
+                //UPDATE THE DATE THE ORDER WAS PURCHASED
+                val currentTime = Calendar.getInstance().time.toString()
+                for (order in orders) {
+                    order.datePurchased = timestamp.toDate().toString()
+                }
             }
     }
 

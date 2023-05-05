@@ -28,6 +28,10 @@ import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.R
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.databinding.FragmentReceiptsBinding
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.Order
 import ph.kodego.yu.vic.sumaya.jc.leones.pat.posapp.model.OrderList
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ReceiptsFragment : Fragment() {
 
@@ -39,6 +43,8 @@ class ReceiptsFragment : Fragment() {
     private var ordersList: ArrayList<OrderList> = ArrayList()
 
     private var currentIndex = 0
+
+    private lateinit var receiptsView: ComposeView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +60,8 @@ class ReceiptsFragment : Fragment() {
         // Composable UI container
         val receiptsUiContainer = binding.receiptsUiContainer
 
-        val receiptsView = ComposeView(requireContext()).apply {
+//        val receiptsView = ComposeView(requireContext()).apply
+         receiptsView = ComposeView(requireContext()).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -147,9 +154,10 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
+                        
                         .clickable(onClick = {
                             onBackClicked()
-                        })
+
                 )
 
                 Icon(
@@ -159,8 +167,10 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
+                        
                         .clickable(onClick = {
                             onNextClicked()
+
                         })
                 )
             }
@@ -181,9 +191,16 @@ class ReceiptsFragment : Fragment() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+
                         Text(
-                            text = "Order ID\n${orders.orderList[it].orderId}",
+                            text = "Order ID: ${orders.orderList[it].orderId}" +
+                                    "\nItem Name: ${orders.orderList[it].itemName}" +
+                                    "\nDate Purchased: ${orders.orderList[it].datePurchased}",
                             fontSize = 18.sp
+                        )
+                        Text(
+                            text = "x ${orders.orderList[it].orderQuantity}",
+                            fontSize = 16.sp
                         )
                         Text(
                             text = "₱${orders.orderList[it].itemPrice * orders.orderList[it].orderQuantity}",
