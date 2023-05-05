@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,10 +60,27 @@ class ReceiptsFragment : Fragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
+
         receiptsUiContainer.addView(receiptsView)
 
-        // Render the ReceiptsScreen composable UI inside the receiptsView
-
+        fun updateReceiptScreen() {
+            receiptsView.setContent {
+                ReceiptScreen(onBackClicked = {
+                    if(currentIndex > 0) {
+                        currentIndex--
+                        orders = ordersList[currentIndex]
+                    }
+                    updateReceiptScreen()
+                }
+                ) {
+                    if (currentIndex < ordersList.size - 1) {
+                        currentIndex++
+                        orders = ordersList[currentIndex]
+                    }
+                    updateReceiptScreen()
+                }
+            }
+        }
 
         db = FirebaseFirestore.getInstance()
 
@@ -77,15 +93,11 @@ class ReceiptsFragment : Fragment() {
                     }
                 }
                 orders = ordersList[currentIndex]
+
+                updateReceiptScreen()
 //                for (ordersOrders in ordersList) {
 //                    orders
 //                }
-
-                receiptsView.setContent {
-                    ReceiptScreen()
-                }
-
-            } else {
             }
         }
             .addOnFailureListener {
@@ -94,7 +106,7 @@ class ReceiptsFragment : Fragment() {
     }
 
     @Composable
-    fun ReceiptScreen() {
+    fun ReceiptScreen(onBackClicked: () -> Unit, onNextClicked: () -> Unit) {
 
         Box(modifier = Modifier.fillMaxSize()) {
 
@@ -133,10 +145,9 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        .clickable(enabled = currentIndex > 0, onClick = {
-                                currentIndex--
-                                orders = ordersList[currentIndex]
-                            })
+                        .clickable(onClick = {
+                            onBackClicked()
+                        })
                 )
 
                 Icon(
@@ -146,11 +157,8 @@ class ReceiptsFragment : Fragment() {
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(40.dp)
-                        .clickable(enabled = currentIndex < ordersList.size - 1, onClick = {
-                            if (currentIndex < ordersList.size - 1) {
-                                currentIndex++
-                                orders = ordersList[currentIndex]
-                            }
+                        .clickable(onClick = {
+                            onNextClicked()
                         })
                 )
             }
@@ -185,11 +193,4 @@ class ReceiptsFragment : Fragment() {
             }
         }
     }
-
-    @Preview
-    @Composable
-    fun ReceiptScreenPreview() {
-        ReceiptScreen()
-    }
-
 }
